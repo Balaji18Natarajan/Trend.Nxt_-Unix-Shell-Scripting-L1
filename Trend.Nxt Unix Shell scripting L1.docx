@@ -1,0 +1,268 @@
+1.	Script to print Hello World 
+
+#!/bin/bash
+echo "Hello World"
+
+2.	Set the execution path, set the execution mode for the script
+
+chmod 111 <path>
+
+3.	Script should print "Hello" with name given as input
+
+#!/bin/bash
+read –p "Your good name Please" name
+echo "Hello $name"
+
+4.	List the processes and redirect to a file
+
+  ps –ef >> process.txt
+
+5.	Script should execute a command which creates an error. The error statement should be redirected to the console
+
+#!/bin/bash
+ehco "Hello World" 2>&1
+
+6.	Script to execute a system command and output to be redirected to a new file and execute another system command and update the same file
+
+#!/bin/bash
+pwd > new.txt
+ls –ltr >> new.txt
+
+7.	List the files recursively and pipe it, grep for files starting with name "test"
+
+#!/bin/bash
+ls –ltr | grep "test*"
+
+8.	List files, pipe the output to filter for names starting with "test", then pipe the output to filter files of size 0 and pipe the output to delete the files with zero sizes.
+
+ls -l | grep "test" awk '{if ($5 == 0) print $9}' | xargs rm
+
+9.	Test operators
+
+#!/bin/bash
+a=10
+n=5
+b="Balaji"
+if [ ! $a –eq  0 ]; then 
+echo "condition true"
+else
+echo "condition false"
+fi
+if [ -n $b ];then
+echo "String length greater than zero"
+else
+echo "String length is zero"
+fi
+if [ -z $b ];then
+echo "String length is zero"
+else
+echo "String length is greater than zero"
+fi
+if [[ $b = $b ]]; then
+echo "Strings are equal"
+else
+echo "Strings are not equal"
+fi
+if [[ $b != $b ]]; then 
+echo "Strings are not equal"
+else
+echo "Strings are equal"
+fi
+ if [ $a –eq  $n ]; then
+echo "Integers are equal"
+else
+echo "Integers are not equal"
+fi
+if [ $a –gt $n ]; then
+echo "$a greater than $n"
+else
+echo "$a not greate than $n"
+fi
+if [ $a –lt $n ]; then
+echo "$a less than $n"
+else
+echo "$a not less than $n"
+fi
+if [ -d /usr/bin ]; then
+echo "It's a directory"
+else
+echo "It's not a directory"
+fi
+if [ -e /bin/bash ]; then
+echo "File exists"
+else
+echo "File does not exists"
+fi
+if [ -r /bin/bash ]; then
+echo "File exists and read permission is granted"
+else
+echo " no read permission"
+fi
+if [ -s /bin/bash ]; then
+echo "File exists and is not empty"
+else
+echo "File is empty"
+fi
+if [ -w /bin/bash ]; then
+echo "Write permission granted"
+else
+echo "No write permission"
+fi
+if [ -x /bin/bash ]; then
+echo "Execute permission granted"
+else
+echo "no Execute permission"
+fi
+
+10.	Construct a regular expression that matches:
+At least one 'a' followed by any number of 'b's  
+ => grep "a+b*" a.txt
+Any number of backslashes followed by any number if asterisks 
+     	=> grep '\\*\**' sorted_input.txt
+Three consecutive copies of whatever is contained in $whatever
+	=> ($whatever){3}
+
+Any five characters, including newline
+	=> [\000-\377]{5}
+
+The same word written two or more times in a row
+	=> (^|\s)(\S+)(\s+\2)+(\s|$)
+11.	 a. Write a program that accepts a list of words on STDIN and looks for a line containing all five vowels (a, e, i, o, and u). Run this program on /usr/dict/words and see what shows up. In other words, enter:
+     		$ myprogram < /usr/dict/words
+b. Modify the program so that the five vowels have to be in order, and intervening letters  don't matter.
+c. Modify the program so that all vowels must be in an increasing order; all five vowels have to be present; and no "e" can occur before an "a", no "i" can occur before an "e", and so on
+
+a. while read line1 ; do if [[ $line1 =~ [aeiou] ]]; then echo $line1; fi ; done < sorted_input.txt
+          				
+b. while read line1 ; do if [[ $line1 == *a*e*i*o*u* ]]; then echo $line1; fi ; done < sorted_input.txt
+c. while read line1 ; do 
+if [[ $line1 =~ [eiou]*a[^iou]*e[^aou]*i[^aeu]*o[^aei]*u[^aeio]* ]]
+then 
+ 		echo $line1 
+ 	fi 
+  done < sorted_input.txt
+
+12.	Write a program that looks through /etc/passwd, printing the login name and real name of each user.
+
+cat /etc/passwd | awk -F: '{print $1, $5}'
+
+13.	Write a program that looks through /etc/passwd for two users with the same first name, and prints those names.
+
+#!/bin/bash
+cat /etc/passwd | awk -F: '{print $5}' | awk -F" " '{print $1}' | uniq -d > first_names.txt
+while read line1; do 
+grep "$line1" /etc/passwd | awk -F: '{print $5}'
+done < first_names.txt
+
+14.	Summation of two real numbers 
+
+#!/bin/bash
+read -p "Enter 1st number " x;
+read -p "Enter 2nd number " y;
+echo "$x+$y" | bc
+
+15.	Print all directories and sub directories with files recursively
+
+ls  -R
+
+16.	Print all directories and sub directories without files recursively
+
+find . –type d
+
+17.	Print all directories and sub directories with files recursively based on size in ascending order.
+
+ls –lrRS
+
+18.	Print all directories and sub directories with files recursively based on modified date.
+
+ls –ltr
+
+19.	Check if process exist, and kill the same.
+
+ps –p $pid | kill $pid
+
+20.	Execute a command "like listing of files recursively" and redirect the o/p to file
+
+ls –R >> output.txt
+
+21.	Script to print disk usage of a directory and all of its subdirectories, then sort the results in descending order total size, and print the top ten.
+
+du –a | sort –nr | head -10
+
+22.	Recursively list all files under specific directory, printing first line of every file.
+
+find . -type f -exec echo {} \; -exec head -n1 {} \;
+
+23.	Search a file for specific string
+
+grep "String" file.extension
+
+24.	Print the count of parameters
+$#
+
+25.	Print the parameters with shift command
+
+#!/bin/bash
+while [ $# -gt 1 ]; do
+        echo $@
+        shift
+done;
+
+26.	Read, Read with Prompt 
+
+read –p "Enter value" x;
+
+27.	Operation (summation, subtraction, multiplication and division)of two numbers using Switch.
+
+ #!/bin/bash
+read -p "enter x " x;
+read -p "enter y " y;
+read -p "operation " op;
+case $op in 
+      add*)
+        echo "$x+$y" | bc
+        break
+        ;;
+      sub*)
+        echo "$x-$y" | bc
+        break
+        ;;
+      mul*)
+        echo "$x*$y" | bc
+        break
+        ;;
+      div*)
+        echo "$x/$y" | bc
+        break
+        ;;
+      *)
+        echo "Wrong operation"
+        ;;
+esac
+
+28.	Sort the given five numbers in ascending order using array
+
+#!/bin/bash
+arr=(10 8 20 100 12)
+echo "Array in original order"
+echo ${arr[*]} 
+  
+# Performing Bubble sort  
+for ((i=0; i<5; i++)) 
+do
+      
+    for((j=i; j<5-i-1; j++)) 
+    do
+      
+        if ((${arr[j]} > ${arr[$((j+1))]})) 
+        then
+            # swap 
+            temp=${arr[$j]} 
+            arr[$j]=${arr[$((j+1))]}   
+            arr[$((j+1))]=$temp 
+        fi
+    done	
+done
+ 
+echo "Array in sorted order :"
+echo ${arr[*]}
